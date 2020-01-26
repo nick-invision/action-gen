@@ -1,0 +1,33 @@
+name: {{name}}
+description: {{description.short}}
+{{#inputs.0}}
+inputs:
+{{/inputs.0}}
+{{#inputs}}
+  {{id}}:
+    description: {{description.short}}
+    {{#required}}
+    required: {{required}}
+    {{/required}}
+    {{^required}}
+    required: false
+    {{/required}}
+    {{#default}}
+    default: {{default}}
+    {{/default}}
+{{/inputs}}
+{{#output.0}}
+outputs:
+{{/output.0}}
+{{#output}}
+  {{id}}:
+    description: {{description.short}}
+{{/output}}
+runs:
+  using: {{runs.using}}
+  main: {{runs.main}}
+{{#branding}}
+branding:
+  icon: {{icon}}
+  color: {{color}}
+{{/branding}}
