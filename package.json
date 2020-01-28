@@ -39,7 +39,8 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npx git-cz && npm run prepare && npm run lint && git add ."
+      "pre-commit": "npm run prepare && npm run lint && git add .",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
@@ -62,6 +63,8 @@
     "yargs": "^15.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@semantic-release/commit-analyzer": "^8.0.0",
     "@types/figlet": "^1.2.0",
     "@types/jest": "^24.9.1",
@@ -72,8 +75,6 @@
     "@typescript-eslint/parser": "^2.17.0",
     "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
-    "commitizen": "^4.0.3",
-    "cz-conventional-changelog": "^3.1.0",
     "doctoc": "^1.4.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
