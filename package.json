@@ -6,13 +6,13 @@
     "github",
     "actions"
   ],
-  "homepage": "https://github.com/nick-fields/action-doc-gen#readme",
+  "homepage": "https://github.com/nick-invision/action-gen#readme",
   "bugs": {
-    "url": "https://github.com/nick-fields/action-doc-gen/issues"
+    "url": "https://github.com/nick-invision/action-gen/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nick-fields/action-doc-gen.git"
+    "url": "git+https://github.com/nick-invision/action-gen.git"
   },
   "license": "ISC",
   "author": "Nick Fields",
