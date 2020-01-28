@@ -1,4 +1,4 @@
-name: CI
+name: Publish
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: CI
+    name: Publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,5 +22,5 @@ jobs:
         run: npm ci
       - run: npx semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

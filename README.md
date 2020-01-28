@@ -1,3 +1,3 @@
 # action-doc-gen
 
-Generate documentation from GitHub Actions action.yml config
+Generate action.yml and README.md for GitHub Actions from single config.
