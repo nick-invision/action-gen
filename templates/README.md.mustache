@@ -1,0 +1,63 @@
+# {{name}}
+
+{{#badges}}
+[![{{displayedText}}]({{badgeUrl}})]({{link}})
+{{/badges}}
+
+{{#description.detailed}}
+{{description.detailed}}
+{{/description.detailed}}
+{{^description.detailed}}
+{{description.short}}
+{{/description.detailed}}
+
+{{#inputs.0}}
+---
+
+## **Inputs**
+{{/inputs.0}}
+{{#inputs}}
+
+### **`{{id}}`**
+
+{{#required}}
+{{#description.detailed}}
+**Required** {{description.detailed}}
+{{/description.detailed}}
+{{^description.detailed}}
+**Required** {{description.short}}
+{{/description.detailed}}
+{{/required}}
+{{^required}}
+{{#description.detailed}}
+**Optional** {{description.detailed}}
+{{/description.detailed}}
+{{^description.detailed}}
+**Optional** {{description.short}}
+{{/description.detailed}}
+{{/required}}
+{{/inputs}}
+
+{{#usage}}
+---
+
+## **Examples**
+{{/usage}}
+{{#usage.examples}}
+
+### {{title}}
+
+```{{codeLanguage}}
+{{codeBlock}}
+```
+{{/usage.examples}}
+
+{{#limitations.0}}
+---
+
+## **Limitations**
+
+{{/limitations.0}}
+{{#limitations}}
+- {{.}}
+{{/limitations}}

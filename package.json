@@ -1,0 +1,90 @@
+{
+  "name": "action-gen",
+  "version": "0.0.0-semantic-release",
+  "description": "Generate GitHub Action action.yml and README.md from config file",
+  "keywords": [
+    "github",
+    "actions"
+  ],
+  "homepage": "https://github.com/nick-invision/action-gen#readme",
+  "bugs": {
+    "url": "https://github.com/nick-invision/action-gen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-invision/action-gen.git"
+  },
+  "license": "ISC",
+  "author": "Nick Fields",
+  "main": "dist/index.js",
+  "bin": {
+    "action-gen": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "npx rimraf dist gen coverage",
+    "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
+    "debug:parse": "ts-node ./src/index",
+    "format": "prettier --write '**/*.ts' ''**/*.yml",
+    "lint": "npm-run-all lint:*",
+    "lint:ts": "eslint --fix '**/*.ts'",
+    "lint:yaml": "yamllint '**/*.yml' --ignore=node_modules/** --fix",
+    "prepare": "npm run build",
+    "serve:coverage": "npx http-server ./coverage/lcov-report",
+    "test": "jest"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prepare && npm run lint && git add ."
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{yml,yaml}": [
+      "yamllint"
+    ]
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "commander": "^4.1.0",
+    "figlet": "^1.2.4",
+    "import-fresh": "^3.2.1",
+    "mustache": "^4.0.0",
+    "rimraf": "^3.0.0",
+    "yaml": "^1.7.2",
+    "yargs": "^15.1.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.2.0",
+    "@types/jest": "^24.9.1",
+    "@types/mustache": "^4.0.0",
+    "@types/node": "^13.5.0",
+    "@types/yaml": "^1.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "bufferutil": "^4.0.1",
+    "canvas": "^2.6.1",
+    "doctoc": "^1.4.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "http-server": "^0.12.0",
+    "husky": "^4.2.1",
+    "jest": "^25.1.0",
+    "lint-staged": "^10.0.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.19.1",
+    "semantic-release": "^17.0.0",
+    "ts-jest": "^25.0.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5",
+    "utf-8-validate": "^5.0.2",
+    "yaml-lint": "^1.2.4"
+  }
+}
