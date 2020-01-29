@@ -40,7 +40,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run prepare && npm run lint && git add .",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -v || node .lintError.js"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS || node .lintError.js"
     }
   },
   "lint-staged": {
