@@ -32,8 +32,11 @@ program
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
     const defaultConfig = `${join(actionDirectory, DEFAULT_CONFIG)}`;
-    const localConfig = `${join(process.cwd(), opts.config)}`;
-    const configPath = opts.init ? defaultConfig : opts.config ? localConfig : defaultConfig;
+    const configPath = opts.init
+      ? defaultConfig
+      : opts.config
+      ? `${join(process.cwd(), opts.config)}`
+      : defaultConfig;
 
     if (opts.init) {
       mkdirSync(actionDirectory, { recursive: true });
