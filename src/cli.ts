@@ -28,7 +28,9 @@ program
     'Initializes a starter configuration in default directory (or in directory passed to -a flag)'
   )
   .action(opts => {
-    const actionDirectory = join(process.cwd(), opts.actionDirectory ?? DEFAULT_DIR);
+    const actionDirectory = opts.actionDirectory
+      ? join(process.cwd(), opts.actionDirectory)
+      : DEFAULT_DIR;
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
     const defaultConfig = `${join(actionDirectory, DEFAULT_CONFIG)}`;
