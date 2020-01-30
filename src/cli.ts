@@ -25,7 +25,7 @@ program
   )
   .option('-c, --config <config>', `Path to config object (default: ${DEFAULT_CONFIG}`)
   .action(opts => {
-    const actionDirectory = opts.actionDirectory ?? DEFAULT_DIR;
+    const actionDirectory = join(process.cwd(), opts.actionDirectory ?? DEFAULT_DIR);
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
     const configPath = `${join(actionDirectory, DEFAULT_CONFIG)}`;
