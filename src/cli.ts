@@ -25,7 +25,10 @@ program
     const actionDirectory = join(process.cwd(), opts.actionDirectory ?? DEFAULT_DIR);
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
-    const configPath = `${join(actionDirectory, opts.config ?? DEFAULT_CONFIG)}`;
+    const configPath = opts.config
+      ? `${join(process.cwd(), opts.config)}`
+      : `${join(actionDirectory, DEFAULT_CONFIG)}`;
+    // const configPath = `${join(actionDirectory, opts.config ?? DEFAULT_CONFIG)}`;
     // render action.yml
     render(ACTION_TEMPLATE, configPath, actionPath);
     // render README.md
