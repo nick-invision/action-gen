@@ -51,6 +51,38 @@ module.exports = {
        * OPTIONAL: Specify whether this input is required.  If omitted, defaults to false
        */
       required: true,
+      /**
+       * OPTIONAL: Default value to assign to this input.
+       */
+      default: true,
+    },
+  ],
+  /**
+   * OPTIONAL: An array of outputs. Output parameters allow you to declare data that an action sets. Actions that run later in a workflow can use the output data set in previously run actions
+   * Used By: action.yml, README.md
+   */
+  outputs: [
+    {
+      /**
+       * REQUIRED: ID of the output.  Must be unique to the action
+       */
+      id: 'pal-repo-token',
+      /**
+       * REQUIRED: Description of the output
+       */
+      description: {
+        /**
+         * REQUIRED: Used in action.yml, and optionally (if detailed is omitted) in README as well
+         * Used By: action.yml and optionally README.md
+         */
+        short: 'Access token with read access to the repo containing action',
+        /**
+         * OPTIONAL: Detailed description of what this input is for
+         * Used By: README.md
+         */
+        detailed:
+          'An access token with the [repo](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) scope to the repository containing the action. **This should be stored as a [repo secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)**.',
+      },
     },
   ],
   /**
