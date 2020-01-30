@@ -14,9 +14,6 @@ const ACTION_TEMPLATE = join(__dirname, '..', `templates/action.yml.mustache`);
 const README_TEMPLATE = join(__dirname, '..', 'templates/README.md.mustache');
 
 console.log(colors.america(figlet.textSync('ACTION-DOC-GEN', { horizontalLayout: 'default' })));
-console.log(__dirname);
-console.log(process.cwd());
-console.log(__dirname);
 
 program
   .option(
@@ -28,7 +25,7 @@ program
     const actionDirectory = join(process.cwd(), opts.actionDirectory ?? DEFAULT_DIR);
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
-    const configPath = `${join(actionDirectory, DEFAULT_CONFIG)}`;
+    const configPath = `${join(actionDirectory, opts.config ?? DEFAULT_CONFIG)}`;
     // render action.yml
     render(ACTION_TEMPLATE, configPath, actionPath);
     // render README.md
