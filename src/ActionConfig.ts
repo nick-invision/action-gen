@@ -32,7 +32,7 @@ export interface ActionConfig {
     main: string;
   };
   inputs?: Input[];
-  output?: Output[];
+  outputs?: Output[];
   author?: string;
   branding?: {
     icon: string;
