@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as figlet from 'figlet';
 import program = require('commander');
 import * as colors from 'colors';
