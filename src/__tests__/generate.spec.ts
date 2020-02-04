@@ -1,47 +1,92 @@
 import { readFileSync, mkdirSync, existsSync } from 'fs';
 import { join, parse } from 'path';
+import { sync } from 'rimraf';
 import { render } from '../index';
 
-const PAL_ACTION_TEMPLATE = './templates/action.yml.mustache';
-const PAL_README_TEMPLATE = './templates/README.md.mustache';
+const ACTION_TEMPLATE = './templates/action.yml.mustache';
+const README_TEMPLATE = './templates/README.md.mustache';
 
-const EXPECTED_PAL_ACTION = readFileSync('./src/__tests__/data/action.yml').toString();
-const EXPECTED_PAL_README = readFileSync('./src/__tests__/data/README.md').toString();
+function getTestOpts(
+  subDir: string,
+  configOverrides?: string[]
+): {
+  GEN_OUTPUT_DIR: string;
+  GEN_OUTPUT_ACTION_PATH: string;
+  GEN_OUTPUT_README_PATH: string;
+  EXPECTED_ACTION: string;
+  EXPECTED_README: string;
+  CONFIGS: string[];
+} {
+  const TEST_DIR = join(process.cwd(), subDir);
+  const GEN_OUTPUT_DIR = join(TEST_DIR, 'gen');
 
-const GEN_OUTPUT_DIR = join(process.cwd(), 'gen');
-const ACTUAL_PAL_ACTION_PATH = `${GEN_OUTPUT_DIR}/action.yml`;
-const ACTUAL_PAL_README_PATH = `${GEN_OUTPUT_DIR}/README.md`;
-
-const TEST_CONFIG_TS = join(process.cwd(), 'src/__tests__/data/.actiongenrc.ts');
-const TEST_CONFIG_JS = join(process.cwd(), 'src/__tests__/data/.actiongenrc.js');
-const TEST_CONFIG_JSON = join(process.cwd(), 'src/__tests__/data/.actiongenrc.json');
-
-const TEST_CONFIGS = [TEST_CONFIG_TS, TEST_CONFIG_JS, TEST_CONFIG_JSON];
+  return {
+    GEN_OUTPUT_DIR,
+    GEN_OUTPUT_ACTION_PATH: join(GEN_OUTPUT_DIR, 'action.yml'),
+    GEN_OUTPUT_README_PATH: join(GEN_OUTPUT_DIR, 'README.md'),
+    EXPECTED_ACTION: readFileSync(join(TEST_DIR, 'action.yml')).toString(),
+    EXPECTED_README: readFileSync(join(TEST_DIR, 'README.md')).toString(),
+    CONFIGS: configOverrides ?? [
+      join(TEST_DIR, '.actiongenrc.json'),
+      join(TEST_DIR, '.actiongenrc.js'),
+      join(TEST_DIR, '.actiongenrc.ts'),
+    ],
+  };
+}
 
 describe('generate', () => {
+  const testData = getTestOpts('src/__tests__/data/pal');
+
   beforeAll(() => {
-    if (!existsSync(GEN_OUTPUT_DIR)) {
-      mkdirSync(GEN_OUTPUT_DIR);
+    sync(testData.GEN_OUTPUT_DIR);
+    if (!existsSync(testData.GEN_OUTPUT_DIR)) {
+      mkdirSync(testData.GEN_OUTPUT_DIR);
     }
   });
 
-  for (const config of TEST_CONFIGS) {
-    describe(`from ${parse(config).ext} config`, () => {
-      describe('action.yml', () => {
-        test('private-action-loader test', async () => {
-          const rendered = render(PAL_ACTION_TEMPLATE, config, ACTUAL_PAL_ACTION_PATH);
+  describe('private-action-loader', () => {
+    for (const config of testData.CONFIGS) {
+      describe(`from ${parse(config).ext} config`, () => {
+        test('action.yml', () => {
+          const rendered = render(ACTION_TEMPLATE, config, testData.GEN_OUTPUT_ACTION_PATH);
 
-          expect(rendered).toBe(EXPECTED_PAL_ACTION);
+          expect(rendered).toBe(testData.EXPECTED_ACTION);
+        });
+
+        test('README.md', () => {
+          const rendered = render(README_TEMPLATE, config, testData.GEN_OUTPUT_README_PATH);
+
+          expect(rendered).toBe(testData.EXPECTED_README);
         });
       });
+    }
+  });
 
-      describe('README.md', () => {
-        test('private-action-loader test', async () => {
-          const rendered = render(PAL_README_TEMPLATE, config, ACTUAL_PAL_README_PATH);
+  describe('--init template', () => {
+    const testData = getTestOpts('src/__tests__/data/template', [
+      join(process.cwd(), './templates/.actiongenrc.js'),
+    ]);
 
-          expect(rendered).toBe(EXPECTED_PAL_README);
-        });
-      });
+    beforeAll(() => {
+      sync(testData.GEN_OUTPUT_DIR);
+      if (!existsSync(testData.GEN_OUTPUT_DIR)) {
+        mkdirSync(testData.GEN_OUTPUT_DIR);
+      }
     });
-  }
+
+    for (const config of testData.CONFIGS) {
+      describe(`from ${parse(config).ext} config`, () => {
+        test('action.yml', () => {
+          const rendered = render(ACTION_TEMPLATE, config, testData.GEN_OUTPUT_ACTION_PATH);
+          expect(rendered).toBe(testData.EXPECTED_ACTION);
+        });
+
+        test('README.md', () => {
+          const rendered = render(README_TEMPLATE, config, testData.GEN_OUTPUT_README_PATH);
+
+          expect(rendered).toBe(testData.EXPECTED_README);
+        });
+      });
+    }
+  });
 });

@@ -1,4 +1,4 @@
-import { ActionConfig } from '../../ActionConfig';
+import { ActionConfig } from '../../../ActionConfig';
 export = <ActionConfig>{
   name: 'Private Action Loader',
   description: {

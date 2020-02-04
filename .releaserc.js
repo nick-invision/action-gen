@@ -15,5 +15,8 @@ module.exports = {
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
   ],
-  branch: 'master',
+  branches: [
+    { name: 'master' },
+    { name: 'develop', channel: 'develop', prerelease: 'develop' }, // `prerelease` is set to `beta` as it is the value of `name`
+  ],
 };

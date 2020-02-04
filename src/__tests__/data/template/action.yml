@@ -1,0 +1,16 @@
+name: Hello World
+description: short description
+inputs:
+  pal-repo-token:
+    description: Access token with read access to the repo containing action
+    required: true
+    default: true
+outputs:
+  pal-repo-token:
+    description: Access token with read access to the repo containing action
+runs:
+  using: node12
+  main: dist/index.js
+branding:
+  icon: lock
+  color: green
