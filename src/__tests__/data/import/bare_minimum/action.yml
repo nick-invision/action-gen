@@ -1,0 +1,5 @@
+name: Name of the action
+description: Short description of action
+runs:
+  using: node12
+  main: dist/index.js

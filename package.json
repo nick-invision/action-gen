@@ -25,6 +25,7 @@
     "clean": "npx rimraf dist gen coverage",
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
     "debug:parse": "ts-node ./src/index",
+    "debug:import": "node --inspect-brk node_modules/.bin/ts-node ./test",
     "format": "prettier --write '**/*.ts' ''**/*.yml",
     "lint": "npm-run-all lint:*",
     "lint:ts": "eslint --fix '**/*.ts'",
@@ -57,8 +58,8 @@
     "commander": "^4.1.0",
     "figlet": "^1.2.4",
     "import-fresh": "^3.2.1",
+    "js-yaml": "^3.13.1",
     "mustache": "^4.0.0",
-    "yaml": "^1.7.2",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "@semantic-release/commit-analyzer": "^8.0.0",
     "@types/figlet": "^1.2.0",
     "@types/jest": "^24.9.1",
+    "@types/js-yaml": "^3.12.2",
     "@types/mustache": "^4.0.0",
     "@types/node": "^13.5.0",
     "@types/rimraf": "^2.0.3",

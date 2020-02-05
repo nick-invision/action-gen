@@ -1,5 +1,7 @@
 # {{name}}
+{{#badges.0}}
 
+{{/badges.0}}
 {{#badges}}
 [![{{displayedText}}]({{badgeUrl}})]({{link}})
 {{/badges}}
@@ -10,8 +12,8 @@
 {{^description.detailed}}
 {{description.short}}
 {{/description.detailed}}
-
 {{#inputs.0}}
+
 ---
 
 ## **Inputs**
@@ -54,8 +56,8 @@
 {{description.short}}
 {{/description.detailed}}
 {{/outputs}}
-
 {{#usage}}
+
 ---
 
 ## **Examples**
@@ -68,8 +70,8 @@
 {{codeBlock}}
 ```
 {{/usage.examples}}
-
 {{#limitations.0}}
+
 ---
 
 ## **Limitations**

@@ -27,6 +27,7 @@ program
     '-i, --init',
     'Initializes a starter configuration in default directory (or in directory passed to -a flag)'
   )
+  .option('--initFromAction', 'Initialize config from existing an action.yml')
   .action(opts => {
     const actionDirectory = opts.actionDirectory
       ? join(process.cwd(), opts.actionDirectory)
