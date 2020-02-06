@@ -1,23 +1,21 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join, parse } from 'path';
-import { render } from '../index';
 import { execSync } from 'child_process';
 import * as mkdirp from 'mkdirp';
-import * as rimraf from 'rimraf';
+import rimraf = require('rimraf');
 
 // const CONFIG_TEMPLATE = './templates/.actiongenrc.js.mustache';
-const ACTION_TEMPLATE = './templates/action.yml.mustache';
-const README_TEMPLATE = './templates/README.md.mustache';
+// const ACTION_TEMPLATE = './templates/action.yml.mustache';
+// const README_TEMPLATE = './templates/README.md.mustache';
 
 const BASE_CLI_CMD = 'ts-node ./src/cli';
 
 async function genExec(config: string, directory: string): Promise<void> {
   const cmd = `${BASE_CLI_CMD} 'generate' '${config}' '-a' '${directory}'`;
-  await execSync(cmd, {
-    stdio: 'inherit',
-  });
+  await execSync(cmd);
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function getTestOpts(subDir: string, configOverrides?: string[]) {
   const TEST_DIR = subDir;
   const GEN_OUTPUT_DIR = join(subDir, 'gen', 'cli');
@@ -29,9 +27,9 @@ function getTestOpts(subDir: string, configOverrides?: string[]) {
     EXPECTED_ACTION: readFileSync(join(TEST_DIR, 'action.yml')).toString(),
     EXPECTED_README: readFileSync(join(TEST_DIR, 'README.md')).toString(),
     CONFIGS: configOverrides ?? [
-      // join(TEST_DIR, '.actiongenrc.json'),
+      join(subDir, '.actiongenrc.json'),
       join(subDir, '.actiongenrc.js'),
-      // join(TEST_DIR, '.actiongenrc.ts'),
+      join(subDir, '.actiongenrc.ts'),
     ],
     CLI_ACTION_DIR: GEN_OUTPUT_DIR, // CLI handles setting cwd
   };
@@ -42,48 +40,55 @@ describe('cli', () => {
 
   beforeAll(async () => {
     rimraf.sync(testData.GEN_OUTPUT_DIR);
-    if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-      mkdirp.sync(testData.GEN_OUTPUT_DIR);
-    }
+    mkdirp.sync(testData.GEN_OUTPUT_DIR);
   });
 
-  describe('private-action-loader', () => {
-    for (const config of testData.CONFIGS) {
-      test('action.yml', async () => {
-        genExec(config, testData.CLI_ACTION_DIR);
+  describe('generate', () => {
+    describe('private-action-loader', () => {
+      for (const config of testData.CONFIGS) {
+        test(`action.yml from ${parse(config).ext}`, async () => {
+          await genExec(config, testData.CLI_ACTION_DIR);
 
-        const generated = await readFileSync(testData.GEN_OUTPUT_ACTION_PATH, 'utf8').toString();
+          const generated = readFileSync(testData.GEN_OUTPUT_ACTION_PATH, 'utf8').toString();
 
-        expect(generated).toBe(testData.EXPECTED_ACTION);
-      }, 3000);
-    }
-  });
+          expect(generated).toBe(testData.EXPECTED_ACTION);
+        }, 3000);
 
-  xdescribe('init template', () => {
-    const testData = getTestOpts('src/__tests__/data/template', [
-      join(process.cwd(), './templates/.actiongenrc.js'),
-    ]);
+        test('README.md', async () => {
+          await genExec(config, testData.CLI_ACTION_DIR);
 
-    // beforeAll(() => {
-    //   sync(testData.GEN_OUTPUT_DIR);
-    //   if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-    //     mkdirSync(testData.GEN_OUTPUT_DIR);
-    //   }
-    // });
+          const generated = readFileSync(testData.GEN_OUTPUT_README_PATH, 'utf8').toString();
 
-    for (const config of testData.CONFIGS) {
-      describe(`from ${parse(config).ext} config`, () => {
-        test('action.yml', () => {
-          const rendered = render(ACTION_TEMPLATE, config, testData.GEN_OUTPUT_ACTION_PATH);
-          expect(rendered).toBe(testData.EXPECTED_ACTION);
-        });
+          expect(generated).toBe(testData.EXPECTED_README);
+        }, 3000);
+      }
+    });
 
-        test('README.md', () => {
-          const rendered = render(README_TEMPLATE, config, testData.GEN_OUTPUT_README_PATH);
+    describe('template', () => {
+      const testData = getTestOpts('src/__tests__/data/template', ['./templates/.actiongenrc.js']);
 
-          expect(rendered).toBe(testData.EXPECTED_README);
-        });
+      beforeAll(async () => {
+        rimraf.sync(testData.GEN_OUTPUT_DIR);
+        mkdirp.sync(testData.GEN_OUTPUT_DIR);
       });
-    }
+
+      for (const config of testData.CONFIGS) {
+        test(`action.yml from ${parse(config).ext}`, async () => {
+          await genExec(config, testData.CLI_ACTION_DIR);
+
+          const generated = readFileSync(testData.GEN_OUTPUT_ACTION_PATH, 'utf8').toString();
+
+          expect(generated).toBe(testData.EXPECTED_ACTION);
+        }, 3000);
+
+        test(`README.md from ${parse(config).ext}`, async () => {
+          await genExec(config, testData.CLI_ACTION_DIR);
+
+          const generated = readFileSync(testData.GEN_OUTPUT_README_PATH, 'utf8').toString();
+
+          expect(generated).toBe(testData.EXPECTED_README);
+        }, 3000);
+      }
+    });
   });
 });

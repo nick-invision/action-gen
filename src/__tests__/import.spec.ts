@@ -1,7 +1,7 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as mkdirp from 'mkdirp';
-import * as rimraf from 'rimraf';
+import rimraf = require('rimraf');
 import { initConfigFromAction, render } from '../index';
 
 const CONFIG_TEMPLATE = './templates/.actiongenrc.js.mustache';
@@ -28,7 +28,7 @@ function getTestOpts(subDir: string) {
 
 describe('import', () => {
   // const testDir = readdirSync(TEST_BASE_DIR);
-  const testDir = ['bare_minimum'];
+  const testDir = ['bare_minimum', 'all_options'];
 
   testDir.forEach(testSubDir => {
     describe(testSubDir, () => {
@@ -36,9 +36,7 @@ describe('import', () => {
 
       beforeAll(async () => {
         rimraf.sync(testData.GEN_OUTPUT_DIR);
-        if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-          mkdirp.sync(testData.GEN_OUTPUT_DIR);
-        }
+        mkdirp.sync(testData.GEN_OUTPUT_DIR);
       });
 
       test('generate config from action', async () => {

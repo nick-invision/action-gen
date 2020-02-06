@@ -35,7 +35,7 @@
     "run:cli": "ts-node ./src/cli",
     "run:parse": "ts-node ./src/index",
     "serve:coverage": "npx http-server ./coverage/lcov-report",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "files": [
     "dist",
