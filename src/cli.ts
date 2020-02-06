@@ -21,7 +21,7 @@ program
   .command('generate <config>')
   .option(
     '-a, --actionDirectory <actionDirectory>',
-    `Directory containing action.yml, README.md and .actionrc.<ts|js|json> (default: ${DEFAULT_DIR})`
+    `Directory containing action.yml, README.md and .actiongenrc.<ts|js|json> (default: ${DEFAULT_DIR})`
   )
   .action(async (config, opts) => {
     const actionDirectory = opts.actionDirectory
@@ -40,12 +40,12 @@ program
 program
   .command('init')
   .option(
-    '-a, --actionDirectory <directory>',
-    `Directory where .actionrc.js will be created (default: ./)`
+    '-a, --actionDirectory <actionDirectory>',
+    `Directory where .actiongenrc.js will be created (default: ./)`
   )
   .option(
-    '-f, --fromAction <action>',
-    `action.yml that should be used to initialize .actionrc.js config`
+    '-f, --fromAction <fromAction>',
+    `action.yml that should be used to initialize .actiongenrc.js config`
   )
   .action(opts => {
     const actionDirectory = opts.actionDirectory
@@ -60,8 +60,8 @@ program
       ? `${join(process.cwd(), opts.config)}`
       : defaultConfig;
 
-    if (opts.action) {
-      initConfigFromAction(CONFIG_TEMPLATE, join(process.cwd(), opts.action), defaultConfig);
+    if (opts.fromAction) {
+      initConfigFromAction(CONFIG_TEMPLATE, join(process.cwd(), opts.fromAction), defaultConfig);
     } else {
       mkdirSync(actionDirectory, { recursive: true });
       writeFileSync(configPath, readFileSync(CONFIG_TEMPLATE, 'utf8'));
