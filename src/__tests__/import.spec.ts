@@ -1,6 +1,7 @@
-import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
-import { sync } from 'rimraf';
+import * as mkdirp from 'mkdirp';
+import * as rimraf from 'rimraf';
 import { initConfigFromAction, render } from '../index';
 
 const CONFIG_TEMPLATE = './templates/.actiongenrc.js.mustache';
@@ -33,10 +34,10 @@ describe('import', () => {
     describe(testSubDir, () => {
       const testData = getTestOpts(join(TEST_BASE_DIR, testSubDir));
 
-      beforeAll(() => {
-        sync(testData.GEN_OUTPUT_DIR);
+      beforeAll(async () => {
+        rimraf.sync(testData.GEN_OUTPUT_DIR);
         if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-          mkdirSync(testData.GEN_OUTPUT_DIR);
+          mkdirp.sync(testData.GEN_OUTPUT_DIR);
         }
       });
 
