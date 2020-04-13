@@ -20,7 +20,7 @@ async function initExec(directory?: string, fromAction?: string): Promise<void> 
   const dir = directory ? ` '-a' '${directory}'` : '';
   const act = fromAction ? ` '-f' '${fromAction}'` : '';
   const cmd = `${BASE_CLI_CMD} 'init'${dir}${act}`;
-  await execSync(cmd);
+  await execSync(cmd, { stdio: 'inherit' });
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -120,8 +120,9 @@ describe('cli', () => {
       });
     });
 
-    describe('new action', () => {
-      const genDir = 'src/__tests__/data/template/gen/cli';
+    describe('from private-action-loader action.yml', () => {
+      const genDir = 'src/__tests__/data/pal/gen/cli';
+      const action = 'src/__tests__/data/pal/action.yml';
 
       beforeAll(async () => {
         rimraf.sync(genDir);
@@ -129,11 +130,12 @@ describe('cli', () => {
       });
 
       test('non-default directory', async () => {
-        await initExec(genDir);
+        await initExec(genDir, action);
 
         const generated = readFileSync(join(genDir, '.actiongenrc.js'), 'utf8').toString();
-        const expected = readFileSync('templates/.actiongenrc.js', 'utf8').toString();
+        const expected = readFileSync('src/__tests__/data/pal/.actiongenrc.js', 'utf8').toString();
 
+        // process.exit(1);
         expect(generated).toBe(expected);
       });
     });

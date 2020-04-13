@@ -98,10 +98,5 @@
     "typescript": "^3.7.5",
     "utf-8-validate": "^5.0.2",
     "yaml-lint": "^1.2.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }

@@ -15,21 +15,21 @@ const ACTION_TEMPLATE = join(__dirname, '..', `templates/action.yml.mustache`);
 const README_TEMPLATE = join(__dirname, '..', 'templates/README.md.mustache');
 const CONFIG_TEMPLATE = join(__dirname, '..', `templates/${DEFAULT_CONFIG}`);
 
-console.log(america(figlet.textSync('ACTION-DOC-GEN', { horizontalLayout: 'default' })));
+console.log(america(figlet.textSync('ACTION-GEN', { horizontalLayout: 'default' })));
 
 program
-  .command('generate <config>')
+  .command('generate')
   .option(
     '-a, --actionDirectory <actionDirectory>',
     `Directory containing action.yml, README.md and .actiongenrc.<ts|js|json> (default: ${DEFAULT_DIR})`
   )
-  .action(async (config, opts) => {
+  .action(async opts => {
     const actionDirectory = opts.actionDirectory
       ? join(process.cwd(), opts.actionDirectory)
       : DEFAULT_DIR;
     const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
     const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
-    const configPath = `${join(process.cwd(), config)}`;
+    const configPath = `${join(actionDirectory, DEFAULT_CONFIG)}`;
 
     // render action.yml
     render(ACTION_TEMPLATE, configPath, actionPath);
@@ -59,6 +59,9 @@ program
       : opts.config
       ? `${join(process.cwd(), opts.config)}`
       : defaultConfig;
+
+    console.log(america('DEBUG'));
+    console.log('fromAction', opts.fromAction);
 
     if (opts.fromAction) {
       initConfigFromAction(CONFIG_TEMPLATE, join(process.cwd(), opts.fromAction), defaultConfig);
