@@ -1,0 +1,26 @@
+name: Name of the action
+description: Short description of action
+inputs:
+  input1:
+    description: Short description of input1
+    required: true
+    default: input1 default
+  input2:
+    description: Short description of input2
+    required: true
+  input3:
+    description: Short description of input3
+    required: false
+    default: input3 default
+  input4:
+    description: Short description of input4
+    required: false
+outputs:
+  output1:
+    description: Short description of output
+runs:
+  using: node12
+  main: dist/index.js
+branding:
+  icon: lock
+  color: green

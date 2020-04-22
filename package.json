@@ -23,15 +23,19 @@
   "scripts": {
     "build": "tsc",
     "clean": "npx rimraf dist gen coverage",
+    "debug:base": "node --inspect-brk node_modules/.bin/ts-node",
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
-    "debug:parse": "ts-node ./src/index",
+    "debug:import": "node --inspect-brk node_modules/.bin/ts-node ./test",
+    "debug:cli": "npm run debug:base -- src/cli generate src/__tests__/data/pal/.actiongenrc.js -a src/__tests__/data/pal/gen/cli",
     "format": "prettier --write '**/*.ts' ''**/*.yml",
     "lint": "npm-run-all lint:*",
     "lint:ts": "eslint --fix '**/*.ts'",
     "lint:yaml": "yamllint '**/*.yml' --ignore=node_modules/** --fix",
     "prepare": "npm run build",
+    "run:cli": "ts-node ./src/cli",
+    "run:parse": "ts-node ./src/index",
     "serve:coverage": "npx http-server ./coverage/lcov-report",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "files": [
     "dist",
@@ -57,8 +61,9 @@
     "commander": "^4.1.0",
     "figlet": "^1.2.4",
     "import-fresh": "^3.2.1",
+    "js-yaml": "^3.13.1",
+    "mkdirp": "^1.0.3",
     "mustache": "^4.0.0",
-    "yaml": "^1.7.2",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
@@ -67,6 +72,8 @@
     "@semantic-release/commit-analyzer": "^8.0.0",
     "@types/figlet": "^1.2.0",
     "@types/jest": "^24.9.1",
+    "@types/js-yaml": "^3.12.2",
+    "@types/mkdirp": "^0.5.2",
     "@types/mustache": "^4.0.0",
     "@types/node": "^13.5.0",
     "@types/rimraf": "^2.0.3",
@@ -91,10 +98,5 @@
     "typescript": "^3.7.5",
     "utf-8-validate": "^5.0.2",
     "yaml-lint": "^1.2.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }

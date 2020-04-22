@@ -1,6 +1,7 @@
-import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join, parse } from 'path';
-import { sync } from 'rimraf';
+import * as mkdirp from 'mkdirp';
+import rimraf = require('rimraf');
 import { render } from '../index';
 
 const ACTION_TEMPLATE = './templates/action.yml.mustache';
@@ -35,16 +36,14 @@ function getTestOpts(
 }
 
 describe('generate', () => {
-  const testData = getTestOpts('src/__tests__/data/pal');
-
-  beforeAll(() => {
-    sync(testData.GEN_OUTPUT_DIR);
-    if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-      mkdirSync(testData.GEN_OUTPUT_DIR);
-    }
-  });
-
   describe('private-action-loader', () => {
+    const testData = getTestOpts('src/__tests__/data/pal');
+
+    beforeAll(async () => {
+      rimraf.sync(testData.GEN_OUTPUT_DIR);
+      mkdirp.sync(testData.GEN_OUTPUT_DIR);
+    });
+
     for (const config of testData.CONFIGS) {
       describe(`from ${parse(config).ext} config`, () => {
         test('action.yml', () => {
@@ -67,11 +66,9 @@ describe('generate', () => {
       join(process.cwd(), './templates/.actiongenrc.js'),
     ]);
 
-    beforeAll(() => {
-      sync(testData.GEN_OUTPUT_DIR);
-      if (!existsSync(testData.GEN_OUTPUT_DIR)) {
-        mkdirSync(testData.GEN_OUTPUT_DIR);
-      }
+    beforeAll(async () => {
+      rimraf.sync(testData.GEN_OUTPUT_DIR);
+      mkdirp.sync(testData.GEN_OUTPUT_DIR);
     });
 
     for (const config of testData.CONFIGS) {

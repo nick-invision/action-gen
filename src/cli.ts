@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import * as figlet from 'figlet';
 import program = require('commander');
-import * as colors from 'colors';
 import { join } from 'path';
-import { render } from './index';
+import { render, initConfigFromAction } from './index';
 import { mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { america } from 'colors';
 
 const DEFAULT_DIR = process.cwd();
 const DEFAULT_CONFIG = '.actiongenrc.js';
@@ -15,17 +15,37 @@ const ACTION_TEMPLATE = join(__dirname, '..', `templates/action.yml.mustache`);
 const README_TEMPLATE = join(__dirname, '..', 'templates/README.md.mustache');
 const CONFIG_TEMPLATE = join(__dirname, '..', `templates/${DEFAULT_CONFIG}`);
 
-console.log(colors.america(figlet.textSync('ACTION-DOC-GEN', { horizontalLayout: 'default' })));
+console.log(america(figlet.textSync('ACTION-GEN', { horizontalLayout: 'default' })));
 
 program
+  .command('generate')
   .option(
-    '-a, --actionDirectory <directory>',
-    `Directory containing action.yml, README.md and .actionrc.<ts|js|json> (default: ${DEFAULT_DIR})`
+    '-a, --actionDirectory <actionDirectory>',
+    `Directory containing action.yml, README.md and .actiongenrc.<ts|js|json> (default: ${DEFAULT_DIR})`
   )
-  .option('-c, --config <config>', `Path to config object (default: ${DEFAULT_CONFIG}`)
+  .action(async opts => {
+    const actionDirectory = opts.actionDirectory
+      ? join(process.cwd(), opts.actionDirectory)
+      : DEFAULT_DIR;
+    const actionPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
+    const readmePath = `${join(actionDirectory, DEFAULT_README)}`;
+    const configPath = `${join(actionDirectory, DEFAULT_CONFIG)}`;
+
+    // render action.yml
+    render(ACTION_TEMPLATE, configPath, actionPath);
+    // render README.md
+    render(README_TEMPLATE, configPath, readmePath);
+  });
+
+program
+  .command('init')
   .option(
-    '-i, --init',
-    'Initializes a starter configuration in default directory (or in directory passed to -a flag)'
+    '-a, --actionDirectory <actionDirectory>',
+    `Directory where .actiongenrc.js will be created (default: ./)`
+  )
+  .option(
+    '-f, --fromAction <fromAction>',
+    `action.yml that should be used to initialize .actiongenrc.js config`
   )
   .action(opts => {
     const actionDirectory = opts.actionDirectory
@@ -40,7 +60,12 @@ program
       ? `${join(process.cwd(), opts.config)}`
       : defaultConfig;
 
-    if (opts.init) {
+    console.log(america('DEBUG'));
+    console.log('fromAction', opts.fromAction);
+
+    if (opts.fromAction) {
+      initConfigFromAction(CONFIG_TEMPLATE, join(process.cwd(), opts.fromAction), defaultConfig);
+    } else {
       mkdirSync(actionDirectory, { recursive: true });
       writeFileSync(configPath, readFileSync(CONFIG_TEMPLATE, 'utf8'));
     }
