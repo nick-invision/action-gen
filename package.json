@@ -64,7 +64,7 @@
     "js-yaml": "^3.13.1",
     "mkdirp": "^1.0.3",
     "mustache": "^4.0.0",
-    "yargs": "^15.1.0"
+    "yargs": "^15.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
