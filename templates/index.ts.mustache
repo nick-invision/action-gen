@@ -1,0 +1,14 @@
+import { ActionOptions, runAction } from './src';
+import { setFailed, info, getInput } from '@actions/core';
+
+const opts: ActionOptions = {
+  jobStatus: getInput('job_status'),
+};
+
+runAction(opts)
+  .then(() => {
+    info('Action completed successfully');
+  })
+  .catch(e => {
+    setFailed(e.toString());
+  });

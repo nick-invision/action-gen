@@ -7,10 +7,12 @@ interface Input {
   description: Description;
   required?: boolean;
   default?: string;
+  camelCaseId?: string;
 }
 interface Output {
   id: string;
   description: Description;
+  camelCaseId?: string;
 }
 interface Example {
   title: string;

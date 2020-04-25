@@ -2,7 +2,7 @@
 import * as figlet from 'figlet';
 import program = require('commander');
 import { join } from 'path';
-import { render, initConfigFromAction } from './index';
+import { render, initConfigFromAction, renderEntryPoint } from './index';
 import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { america } from 'colors';
 
@@ -14,6 +14,8 @@ const DEFAULT_README = 'README.md';
 const ACTION_TEMPLATE = join(__dirname, '..', `templates/action.yml.mustache`);
 const README_TEMPLATE = join(__dirname, '..', 'templates/README.md.mustache');
 const CONFIG_TEMPLATE = join(__dirname, '..', `templates/${DEFAULT_CONFIG}`);
+const INDEX_TEMPLATE = join(__dirname, '..', `templates/index.ts.mustache`);
+const SOURCE_TEMPLATE = join(__dirname, '..', `templates/src-index.ts.mustache`);
 
 console.log(america(figlet.textSync('ACTION-GEN', { horizontalLayout: 'default' })));
 
@@ -73,6 +75,43 @@ program
     render(ACTION_TEMPLATE, configPath, actionPath);
     // render README.md
     render(README_TEMPLATE, configPath, readmePath);
+  });
+
+program
+  .command('init-entry')
+  .option(
+    '-a, --actionDirectory <actionDirectory>',
+    `Directory where .actiongenrc.js will be created (default: ./)`
+  )
+  .action(opts => {
+    const actionDirectory = opts.actionDirectory
+      ? join(process.cwd(), opts.actionDirectory)
+      : DEFAULT_DIR;
+
+    const indexPath = `${join(actionDirectory, DEFAULT_ACTION)}`;
+    const sourcePath = `${join(actionDirectory, DEFAULT_README)}`;
+
+    const defaultConfig = `${join(actionDirectory, DEFAULT_CONFIG)}`;
+    const configPath = opts.init
+      ? defaultConfig
+      : opts.config
+      ? `${join(process.cwd(), opts.config)}`
+      : defaultConfig;
+
+    console.log(america('DEBUG'));
+    console.log('fromAction', opts.fromAction);
+
+    if (opts.fromAction) {
+      initConfigFromAction(CONFIG_TEMPLATE, join(process.cwd(), opts.fromAction), defaultConfig);
+    } else {
+      mkdirSync(actionDirectory, { recursive: true });
+      writeFileSync(configPath, readFileSync(CONFIG_TEMPLATE, 'utf8'));
+    }
+    // render index.ts
+    renderEntryPoint(INDEX_TEMPLATE, configPath, indexPath);
+
+    // render src/index.ts
+    renderEntryPoint(SOURCE_TEMPLATE, configPath, sourcePath);
   });
 
 program.parse(process.argv);

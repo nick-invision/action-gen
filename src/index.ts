@@ -1,9 +1,20 @@
+import { parse, join } from 'path';
 import { render as mustacheRender } from 'mustache';
 import { ActionConfig } from './ActionConfig';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import Mustache from 'mustache';
 import importFresh from 'import-fresh';
 import * as yaml from 'js-yaml';
+import camelcase = require('camelcase');
+import mkdirp = require('mkdirp');
+
+const DEFAULT_DIR = process.cwd();
+const DEFAULT_CONFIG = '.actiongenrc.js';
+const DEFAULT_INDEX = 'index.ts';
+const DEFAULT_SOURCE = 'src/index.ts';
+
+const INDEX_TEMPLATE = join(__dirname, '..', `templates/index.ts.mustache`);
+const SOURCE_TEMPLATE = join(__dirname, '..', `templates/src-index.ts.mustache`);
 
 // helpers
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -51,6 +62,42 @@ function render(inputPath: string, configPath: string, outputPath: string): stri
 
   return rendered;
 }
+function renderEntryPoint(inputPath: string, configPath: string, outputPath: string): string {
+  const outDir = parse(outputPath).dir;
+
+  if (!existsSync(inputPath)) {
+    throw `${inputPath} not found`;
+  }
+  if (!existsSync(configPath)) {
+    throw `${configPath} not found`;
+  }
+
+  const template = JSON.parse(readFileSync(inputPath, 'utf8').toString());
+  const actionConfig = importFresh(configPath);
+
+  // disable HTML escaping since we are not generating HTML
+  Mustache.escape = (text: string): string => {
+    return text;
+  };
+
+  template.inputs?.forEach((input: any) => {
+    input['camelCaseName'] = camelcase(input.id);
+  });
+
+  template.outputs?.forEach((output: any) => {
+    output['camelCaseName'] = camelcase(output.id);
+  });
+
+  const rendered = mustacheRender(template.toString(), actionConfig);
+
+  if (!existsSync(outDir)) {
+    mkdirp.sync(outDir);
+  }
+
+  writeFileSync(outputPath, rendered);
+
+  return rendered;
+}
 
 function initConfigFromAction(
   configTemplate: string,
@@ -77,4 +124,21 @@ function initConfigFromAction(
   return rendered;
 }
 
-export { ActionConfig, render, initConfigFromAction };
+// cli commands
+async function initEntry(opts: { actionDirectory: string }) {
+  const actionDirectory = opts.actionDirectory
+    ? join(process.cwd(), opts.actionDirectory)
+    : DEFAULT_DIR;
+
+  const indexPath = `${join(actionDirectory, DEFAULT_INDEX)}`;
+  const sourcePath = `${join(actionDirectory, DEFAULT_SOURCE)}`;
+  const configPath = `${join(actionDirectory, DEFAULT_CONFIG)}`;
+
+  // render index.ts
+  renderEntryPoint(INDEX_TEMPLATE, configPath, indexPath);
+
+  // render src/index.ts
+  renderEntryPoint(SOURCE_TEMPLATE, configPath, sourcePath);
+}
+
+export { ActionConfig, render, initConfigFromAction, renderEntryPoint, initEntry };

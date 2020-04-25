@@ -1,0 +1,12 @@
+import { setFailed, info } from '@actions/core';
+
+export interface ActionOptions {
+  {{#inputs}}
+  jobStatus: string;
+  {{/inputs}}
+}
+
+export async function runAction(opts: ActionOptions): Promise<void> {
+  info(`ActionOptions: ${JSON.stringify(opts, null, 2)}`);
+  setFailed('Not yet implemented');
+}
