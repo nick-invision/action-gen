@@ -63,8 +63,7 @@
     "import-fresh": "^3.2.1",
     "js-yaml": "^3.13.1",
     "mkdirp": "^1.0.3",
-    "mustache": "^4.0.0",
-    "yargs": "^15.3.0"
+    "mustache": "^4.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -98,6 +97,7 @@
     "ts-node": "^8.6.2",
     "typescript": "3.8.3",
     "utf-8-validate": "^5.0.2",
-    "yaml-lint": "^1.2.4"
+    "yaml-lint": "^1.2.4",
+    "yargs": "15.1.0"
   }
 }
