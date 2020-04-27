@@ -64,7 +64,6 @@
     "js-yaml": "^3.13.1",
     "mkdirp": "^1.0.3",
     "mustache": "^4.0.0",
-    "reportportal-client": "5.2.1",
     "yargs": "^15.3.0"
   },
   "devDependencies": {
