@@ -8,7 +8,7 @@ import { america } from 'colors';
 
 const DEFAULT_DIR = process.cwd();
 const DEFAULT_CONFIG = '.actiongenrc.js';
-const DEFAULT_MINIMAL_CONFIG = '.actiongenrc.js';
+const DEFAULT_MINIMAL_CONFIG = '.actiongenrc.minimal.js';
 const DEFAULT_ACTION = 'action.yml';
 const DEFAULT_README = 'README.md';
 
@@ -67,7 +67,6 @@ program
       : opts.config
       ? `${join(process.cwd(), opts.config)}`
       : defaultConfig;
-
     const template = opts.minimal ? MINIMAL_CONFIG_TEMPLATE : CONFIG_TEMPLATE;
 
     if (opts.fromAction) {
