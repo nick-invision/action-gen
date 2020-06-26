@@ -106,7 +106,7 @@ module.exports = {
   branding: {
     /**
      *  REQUIRED: The background color of the badge. Can be one of: white, yellow, blue, green, orange, red, purple, or gray-dark.
-     * */
+     */
     color: 'green',
     /**
      * REQUIRED: Feather icon to use.  See https://feathericons.com/ for full list

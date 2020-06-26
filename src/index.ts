@@ -77,4 +77,12 @@ function initConfigFromAction(
   return rendered;
 }
 
-export { ActionConfig, render, initConfigFromAction };
+/**
+ * Helper to make it easier to create a "typed" config from a vanilla js config
+ * @param config
+ */
+function buildConfig(config: ActionConfig): ActionConfig {
+  return config;
+}
+
+export { ActionConfig, render, initConfigFromAction, buildConfig };
