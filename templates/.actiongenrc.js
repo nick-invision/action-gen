@@ -1,4 +1,5 @@
-module.exports = {
+const { buildConfig } = require('action-gen');
+module.exports = buildConfig({
   /**
    * REQUIRED: The name of your action. GitHub displays the name in the Actions tab to help visually identify actions in each job.
    * Used By: action.yml, README.md
@@ -172,4 +173,4 @@ module.exports = {
    * Used By: README.md
    */
   limitations: ['Only supports javascript actions', 'There is very little error handling so far'],
-};
+});

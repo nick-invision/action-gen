@@ -1,4 +1,5 @@
-module.exports = {
+const { buildConfig } = require('action-gen');
+module.exports = buildConfig({
   name: 'Hello World',
   description: {
     short: 'short description',
@@ -41,4 +42,4 @@ module.exports = {
     ],
   },
   limitations: ['Only supports javascript actions', 'There is very little error handling so far'],
-};
+});
